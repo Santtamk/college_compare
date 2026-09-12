@@ -1,342 +1,1094 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JEMScN 2026 College Comparator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>JEMScN 2026 College Comparator | WBJEEB MSc Nursing</title>
+    <meta name="description" content="Compare WBJEEB JEMScN 2026 private nursing institutions side-by-side: fee structures, clinical exposure, seat matrix, hostel fees, and unbiased reviews.">
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
                     },
                     colors: {
-                        primary: '#0ea5e9', // Sky blue
-                        secondary: '#10b981', // Emerald green
-                        dark: '#0f172a',
-                        light: '#f8fafc',
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        emerald: {
+                            50: '#ecfdf5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                        }
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(15, 23, 42, 0.08)',
+                        'subtle': '0 2px 8px -1px rgba(0, 0, 0, 0.05), 0 1px 4px -1px rgba(0, 0, 0, 0.03)',
+                        'card-hover': '0 12px 24px -4px rgba(14, 165, 233, 0.12), 0 4px 12px -2px rgba(0, 0, 0, 0.04)',
                     }
                 }
             }
         }
     </script>
+    
     <style>
-        /* Custom scrollbar for horizontal scrolling on mobile */
-        .hide-scroll::-webkit-scrollbar {
-            height: 6px;
-        }
-        .hide-scroll::-webkit-scrollbar-track {
-            background: #f1f1f1; 
-            border-radius: 4px;
-        }
-        .hide-scroll::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
-            border-radius: 4px;
-        }
-        .hide-scroll::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8; 
+        /* Smooth Touch & Scrollbar Styling */
+        * {
+            -webkit-tap-highlight-color: transparent;
         }
         
-        /* Sticky column styling for mobile table view */
+        .custom-scroll::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Sticky Column for Table on Mobile */
         .sticky-col {
             position: sticky;
             left: 0;
-            background-color: #f8fafc;
-            z-index: 10;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            z-index: 20;
+            background-color: #ffffff;
+            box-shadow: 3px 0 6px -2px rgba(0, 0, 0, 0.08);
         }
-        
-        /* Checkbox custom styling */
-        .college-checkbox:checked + label {
-            background-color: #0ea5e9;
-            color: white;
-            border-color: #0ea5e9;
+
+        .sticky-header {
+            position: sticky;
+            top: 64px;
+            z-index: 30;
+        }
+
+        /* Badge Pulses */
+        @keyframes subtlePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.85; }
+        }
+        .animate-subtle {
+            animation: subtlePulse 3s infinite ease-in-out;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col pb-20 md:pb-8 selection:bg-brand-500 selection:text-white">
 
-    <nav class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-50">
+    <!-- Header / Navbar -->
+    <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-2">
-                    <div class="bg-primary text-white p-2 rounded-lg">
-                        <i class="fa-solid fa-user-nurse text-xl"></i>
+            <div class="flex justify-between h-16 items-center gap-3">
+                <!-- Brand Logo & Title -->
+                <div class="flex items-center gap-3">
+                    <div class="bg-gradient-to-tr from-brand-600 to-brand-400 text-white p-2.5 rounded-xl shadow-sm shadow-brand-500/30 flex items-center justify-center">
+                        <i class="fa-solid fa-user-nurse text-lg sm:text-xl"></i>
                     </div>
-                    <span class="font-bold text-xl tracking-tight text-slate-900">JEMScN Compare</span>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-extrabold text-lg sm:text-xl tracking-tight text-slate-900">JEMScN <span class="text-brand-600 font-bold">Compare</span></span>
+                            <span class="bg-brand-50 text-brand-700 text-[11px] font-bold px-2 py-0.5 rounded-full border border-brand-200">2026</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 hidden sm:block">WBJEEB MSc Nursing Private Institutions Strategic Matrix</p>
+                    </div>
                 </div>
-                <div class="text-sm font-medium text-slate-500 hidden sm:block">
-                    WBJEEB 2026 Admissions
+
+                <!-- Header Actions -->
+                <div class="flex items-center gap-2">
+                    <button onclick="shareOrCopyLink()" class="p-2 sm:px-3 sm:py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-colors" title="Share Comparison">
+                        <i class="fa-solid fa-share-nodes text-brand-600"></i>
+                        <span class="hidden sm:inline" id="share-btn-text">Share</span>
+                    </button>
+                    <button onclick="window.print()" class="p-2 sm:px-3 sm:py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-colors" title="Print or Save as PDF">
+                        <i class="fa-solid fa-print text-slate-600"></i>
+                        <span class="hidden sm:inline">Print / PDF</span>
+                    </button>
                 </div>
             </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <!-- Hero Section -->
+        <section class="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 text-white pt-8 pb-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
+            <div class="max-w-7xl mx-auto relative z-10 text-center">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/20 text-brand-300 border border-brand-400/30 mb-3">
+                    <i class="fa-solid fa-scale-balanced text-brand-400"></i> Multi-Dimensional Analysis
+                </span>
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-2 sm:mb-3">
+                    Strategic Nursing College Comparator
+                </h1>
+                <p class="text-slate-300 text-xs sm:text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+                    Compare 2-year MSc tuition, hostel expenses, hospital bed capacity, seat matrix (Home State vs All India), and practical exposure side-by-side for confident choice-locking.
+                </p>
+
+                <!-- Quick Stats summary bar -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 max-w-3xl mx-auto mt-6 text-left">
+                    <div class="bg-white/10 backdrop-blur-md rounded-xl p-2.5 sm:p-3 border border-white/10">
+                        <div class="text-[11px] text-slate-300 font-medium">Institutes Tracked</div>
+                        <div class="text-lg sm:text-xl font-bold text-white">9 Top Colleges</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md rounded-xl p-2.5 sm:p-3 border border-white/10">
+                        <div class="text-[11px] text-slate-300 font-medium">Lowest 2-Yr Tuition</div>
+                        <div class="text-lg sm:text-xl font-bold text-emerald-400">₹1.30 Lakh <span class="text-[10px] text-slate-300 font-normal">(TMC)</span></div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md rounded-xl p-2.5 sm:p-3 border border-white/10">
+                        <div class="text-[11px] text-slate-300 font-medium">Max Bed Exposure</div>
+                        <div class="text-lg sm:text-xl font-bold text-brand-300">750+ Beds <span class="text-[10px] text-slate-300 font-normal">(KPC/Apollo)</span></div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md rounded-xl p-2.5 sm:p-3 border border-white/10">
+                        <div class="text-[11px] text-slate-300 font-medium">Seat Breakdown</div>
+                        <div class="text-lg sm:text-xl font-bold text-amber-300">AI & HS Split</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Control Bar & Search -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-5 relative z-20">
+            <div class="bg-white rounded-2xl shadow-glass border border-slate-200/80 p-4 sm:p-6 space-y-4">
+                
+                <!-- Search & View Mode Switcher -->
+                <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+                    <!-- Search Input -->
+                    <div class="relative flex-1">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                        <input type="text" id="search-input" oninput="handleSearch(this.value)"
+                               placeholder="Search college, hospital, location, or keyword..."
+                               class="w-full pl-10 pr-9 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all">
+                        <button id="search-clear-btn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1">
+                            <i class="fa-solid fa-circle-xmark text-sm"></i>
+                        </button>
+                    </div>
+
+                    <!-- View Switcher Tabs -->
+                    <div class="bg-slate-100 p-1 rounded-xl flex items-center justify-between sm:justify-start gap-1 self-start sm:self-auto w-full sm:w-auto">
+                        <button onclick="setViewMode('cards')" id="view-cards-btn" 
+                                class="flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all bg-white text-brand-700 shadow-sm">
+                            <i class="fa-solid fa-table-cells-large"></i>
+                            <span>Cards</span>
+                        </button>
+                        <button onclick="setViewMode('duel')" id="view-duel-btn" 
+                                class="flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition-all text-slate-600 hover:text-slate-900">
+                            <i class="fa-solid fa-code-compare"></i>
+                            <span>2-Way Duel</span>
+                        </button>
+                        <button onclick="setViewMode('table')" id="view-table-btn" 
+                                class="flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition-all text-slate-600 hover:text-slate-900">
+                            <i class="fa-solid fa-table-columns"></i>
+                            <span>Matrix Table</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filter Presets & Category Chips -->
+                <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs">
+                    <div class="flex flex-wrap items-center gap-1.5" id="preset-filters">
+                        <span class="text-slate-400 font-medium mr-1 text-[11px]">Quick Filters:</span>
+                        <button onclick="applyPreset('all')" id="preset-all" class="px-2.5 py-1 rounded-lg font-semibold bg-brand-50 text-brand-700 border border-brand-200 transition-colors">All (9)</button>
+                        <button onclick="applyPreset('top3')" id="preset-top3" class="px-2.5 py-1 rounded-lg font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 border border-transparent transition-colors">Top 3 Recommended</button>
+                        <button onclick="applyPreset('budget')" id="preset-budget" class="px-2.5 py-1 rounded-lg font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 border border-transparent transition-colors">Lowest Fees</button>
+                        <button onclick="applyPreset('highseats')" id="preset-highseats" class="px-2.5 py-1 rounded-lg font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 border border-transparent transition-colors">High Seats (10+)</button>
+                        <button onclick="applyPreset('corporate')" id="preset-corporate" class="px-2.5 py-1 rounded-lg font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 border border-transparent transition-colors">Corporate</button>
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <button onclick="selectAllColleges()" class="text-brand-600 hover:text-brand-700 font-semibold hover:underline">Select All</button>
+                        <span class="text-slate-300">|</span>
+                        <button onclick="clearAllColleges()" class="text-slate-500 hover:text-slate-700 font-semibold hover:underline">Reset (Top 3)</button>
+                    </div>
+                </div>
+
+                <!-- College Selection Checkbox Pills -->
+                <div class="pt-2">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-circle-check text-brand-500"></i> Active Selection (<span id="selected-count">3</span>/9)
+                        </span>
+                        <span class="text-[11px] text-slate-400">Tap pills to toggle inclusion</span>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 sm:gap-2" id="college-selectors">
+                        <!-- Checkboxes injected by JS -->
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Main View Area -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            
+            <!-- VIEW 1: Cards View (Mobile Optimized) -->
+            <div id="view-cards-container" class="space-y-4">
+                <div class="flex items-center justify-between mb-1">
+                    <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-brand-600"></i>
+                        <span>Institutional Profiles</span>
+                        <span class="text-xs font-normal text-slate-500" id="cards-showing-count"></span>
+                    </h2>
+                    <div class="text-xs text-slate-500 flex items-center gap-1">
+                        <i class="fa-solid fa-arrow-down-short-wide text-brand-500"></i>
+                        <span>Sorted strategically</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" id="cards-grid">
+                    <!-- Cards will be injected here via JS -->
+                </div>
+            </div>
+
+            <!-- VIEW 2: Duel / 2-College Battle View (Super clean for mobile 1-on-1) -->
+            <div id="view-duel-container" class="hidden space-y-6">
+                <div class="bg-white rounded-2xl shadow-subtle border border-slate-200 p-4 sm:p-6">
+                    <div class="text-center max-w-xl mx-auto mb-6">
+                        <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-code-compare text-brand-600"></i> Head-to-Head Duel Mode
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1">Select any 2 colleges to see their key attributes compared point-by-point directly on your mobile screen.</p>
+                    </div>
+
+                    <!-- Duel Selectors -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center mb-6">
+                        <div class="bg-brand-50/70 border border-brand-200 rounded-xl p-3 sm:p-4">
+                            <label class="block text-xs font-bold text-brand-900 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                <span class="w-5 h-5 rounded-full bg-brand-600 text-white flex items-center justify-center text-[10px]">A</span>
+                                College 1
+                            </label>
+                            <select id="duel-select-1" onchange="renderDuelView()" class="w-full bg-white border border-brand-200 rounded-lg p-2.5 text-sm font-bold text-slate-800 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                                <!-- Options populated by JS -->
+                            </select>
+                        </div>
+
+                        <div class="bg-purple-50/70 border border-purple-200 rounded-xl p-3 sm:p-4">
+                            <label class="block text-xs font-bold text-purple-900 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                <span class="w-5 h-5 rounded-full bg-purple-600 text-white flex items-center justify-center text-[10px]">B</span>
+                                College 2
+                            </label>
+                            <select id="duel-select-2" onchange="renderDuelView()" class="w-full bg-white border border-purple-200 rounded-lg p-2.5 text-sm font-bold text-slate-800 focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                                <!-- Options populated by JS -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Duel Comparison Container -->
+                    <div id="duel-result-container">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 3: Matrix Table View -->
+            <div id="view-table-container" class="hidden space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-table-columns text-brand-600"></i>
+                        <span>Side-by-Side Comparison Matrix</span>
+                    </h2>
+                    <div class="text-xs text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full border border-brand-200 font-medium">
+                        <i class="fa-solid fa-arrows-left-right mr-1"></i> Swipe horizontally to compare
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-glass border border-slate-200 overflow-hidden">
+                    <div class="overflow-x-auto custom-scroll" id="table-scroll-container">
+                        <!-- Table injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- No Results Found State -->
+            <div id="no-results-state" class="hidden text-center py-12 bg-white rounded-2xl border border-slate-200 p-8 my-6">
+                <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto text-2xl mb-4">
+                    <i class="fa-solid fa-filter-circle-xmark"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-1">No colleges match your filter</h3>
+                <p class="text-sm text-slate-500 max-w-sm mx-auto mb-4">Try clearing the search query or selecting more colleges from the selector above.</p>
+                <button onclick="resetFiltersAndSelection()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl transition-all shadow-sm shadow-brand-500/30">
+                    Reset Filters & Show All
+                </button>
+            </div>
+
+            <!-- Choice Locking Guide & Tips Section -->
+            <section class="mt-8 bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-2xl p-6 sm:p-8 shadow-glass">
+                <div class="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+                    <div class="space-y-2">
+                        <div class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 uppercase tracking-wider">
+                            <i class="fa-solid fa-lightbulb"></i> Strategic Counseling Insight
+                        </div>
+                        <h3 class="text-xl font-extrabold text-white">How to prioritize your WBJEEB Choice Sheet?</h3>
+                        <p class="text-slate-300 text-xs sm:text-sm max-w-2xl leading-relaxed">
+                            <strong>1. Clinical Exposure First:</strong> For Medical Surgical MSc, parent hospital bed capacity (e.g. Apollo, Charnock, Narayana, KPC) outweighs campus glamour.<br>
+                            <strong>2. Cost vs ROI:</strong> Factor in mandatory hostel & mess costs. Tata Medical Centre offers the lowest tuition (₹1.3L) with elite oncology brand value. Neotia offers mess-included hostel.
+                        </p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                        <button onclick="applyPreset('top3')" class="px-4 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs sm:text-sm font-bold text-center transition-all shadow-md shadow-brand-500/20">
+                            Apply Top 3 Preset
+                        </button>
+                        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs sm:text-sm font-bold text-center transition-all border border-white/20">
+                            Back to Top <i class="fa-solid fa-arrow-up ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <!-- Mobile Floating Navigation Bar -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-slate-200 px-3 py-2 z-50 flex items-center justify-between shadow-2xl">
+        <div class="flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+            <span class="text-xs font-bold text-slate-800" id="mobile-bottom-count">3 Selected</span>
+        </div>
+        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+            <button onclick="setViewMode('cards')" id="mobile-btn-cards" class="px-3 py-1 text-xs font-bold rounded-lg bg-white text-brand-700 shadow-xs flex items-center gap-1">
+                <i class="fa-solid fa-table-cells-large"></i> Cards
+            </button>
+            <button onclick="setViewMode('duel')" id="mobile-btn-duel" class="px-3 py-1 text-xs font-semibold rounded-lg text-slate-600 flex items-center gap-1">
+                <i class="fa-solid fa-code-compare"></i> Duel
+            </button>
+            <button onclick="setViewMode('table')" id="mobile-btn-table" class="px-3 py-1 text-xs font-semibold rounded-lg text-slate-600 flex items-center gap-1">
+                <i class="fa-solid fa-table-columns"></i> Table
+            </button>
         </div>
     </nav>
 
-    <main class="flex-grow">
-        <!-- Hero Section -->
-        <div class="bg-dark text-white py-12 px-4 sm:px-6 lg:px-8">
-            <div class="max-w-7xl mx-auto text-center">
-                <h1 class="text-3xl md:text-4xl font-extrabold mb-4">Strategic College Selection</h1>
-                <p class="text-slate-300 max-w-2xl mx-auto text-lg">
-                    Select the private nursing institutions below to compare their fee structures, clinical exposure, seat matrices, and unbiased reviews side-by-side.
-                </p>
-            </div>
-        </div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
-                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-list-check text-primary"></i> Select Colleges to Compare
-                </h2>
-                <div class="flex flex-wrap gap-3" id="college-selectors">
-                    <!-- Checkboxes will be injected here via JS -->
-                </div>
-                <p class="text-xs text-slate-500 mt-4"><i class="fa-solid fa-circle-info mr-1"></i> Tip: Scroll the table horizontally on mobile devices.</p>
-            </div>
-
-            <!-- Comparison Table Container -->
-            <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
-                <div class="overflow-x-auto hide-scroll" id="table-container">
-                    <!-- Table will be injected here via JS -->
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <footer class="bg-white border-t border-slate-200 py-6 mt-12">
-        <div class="max-w-7xl mx-auto px-4 text-center text-sm text-slate-500">
-            <p>Data based on WBJEEB JEMScN 2026 Seat Matrix & Independent Institutional Analysis.</p>
-            <p class="mt-1">For informational purposes to assist in choice-locking.</p>
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-6">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 space-y-1">
+            <p class="font-medium text-slate-700">Data synthesized from official WBJEEB JEMScN 2026 Seat Matrix & Independent Clinical Analysis.</p>
+            <p>Single source of truth. Built for instant mobile and desktop evaluation.</p>
         </div>
     </footer>
 
+    <!-- Toast Notification for Share / Copy -->
+    <div id="toast" class="fixed bottom-16 sm:bottom-6 right-4 left-4 sm:left-auto sm:max-w-sm bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 transform translate-y-24 opacity-0 transition-all duration-300 z-50">
+        <i class="fa-solid fa-circle-check text-brand-400 text-lg"></i>
+        <span id="toast-message" class="text-xs sm:text-sm font-medium">Link copied to clipboard!</span>
+    </div>
+
+    <!-- Application Script -->
     <script>
-        // Comprehensive data derived from the research report
+        // Comprehensive Dataset
         const collegeData = [
             {
                 id: 'apollo',
                 name: 'Apollo College of Nursing',
+                shortName: 'Apollo',
                 type: 'Corporate Multispecialty',
+                category: 'corporate',
                 address: 'RGN/6/A/S/1044, Gopalpur, Narayanpur, Kolkata - 700136',
                 fees: '₹2,50,000 - ₹3,00,000',
+                feeNumeric: 275000,
                 hostel: '₹1,08,000 / year (Strict rules, advance payment)',
                 seatsMedSurg: '2 All India | 12 Home State',
-                infrastructure: '700-bed Apollo Multispecialty Hospital. Simulation labs, corporate environment.',
+                seatsAI: 2,
+                seatsHS: 12,
+                totalSeats: 14,
+                infrastructure: '700-bed Apollo Multispecialty Hospital. Simulation labs, high-tech corporate setup.',
+                beds: '700 Beds',
                 placements: '100% Guaranteed within Apollo network. Highly rated (Starts ~₹30k/mo).',
                 verdict: 'The Corporate Clinician Profile. Best general multi-specialty clinical exposure and placement. High cost.',
-                color: 'blue'
+                themeColor: 'sky',
+                badgeText: 'Top Clinical Exposure',
+                badgeColor: 'bg-sky-100 text-sky-800 border-sky-200',
+                headerGradient: 'from-sky-500 to-blue-600',
+                topPick: true
             },
             {
                 id: 'charnock',
                 name: 'Charnock College of Nursing',
+                shortName: 'Charnock',
                 type: 'Corporate Multispecialty',
+                category: 'corporate',
                 address: 'Synthesis Building, Action Area-II, New Town, Kolkata-700157',
                 fees: '₹2,44,000',
+                feeNumeric: 244000,
                 hostel: '₹72,000 / year (Excludes Food/Mess)',
                 seatsMedSurg: '2 All India | 0 Home State',
+                seatsAI: 2,
+                seatsHS: 0,
+                totalSeats: 2,
                 infrastructure: '610-bed Charnock Hospital. 21 modern classrooms in Synthesis Business Park.',
-                placements: '100% internal absorption. High ratings for practical training.',
+                beds: '610 Beds',
+                placements: '100% internal absorption. High ratings for practical bedside training.',
                 verdict: 'Excellent balanced choice. Multi-specialty exposure with transparent mid-range pricing.',
-                color: 'teal'
+                themeColor: 'teal',
+                badgeText: 'Balanced Choice',
+                badgeColor: 'bg-teal-100 text-teal-800 border-teal-200',
+                headerGradient: 'from-teal-500 to-emerald-600',
+                topPick: true
             },
             {
                 id: 'tmc',
                 name: 'Tata Medical Centre',
+                shortName: 'Tata Medical',
                 type: 'Hyper-Specialized (Oncology)',
+                category: 'specialized',
                 address: '14 M.A.R. (E.W.), Newtown, Rajarhat, Kolkata - 700160',
                 fees: '₹1,30,000 (Highly subsidized)',
+                feeNumeric: 130000,
                 hostel: '₹48,000 / year (Highly limited availability)',
                 seatsMedSurg: '2 All India | 2 Home State',
+                seatsAI: 2,
+                seatsHS: 2,
+                totalSeats: 4,
                 infrastructure: '431-bed elite cancer care facility. Advanced robotic surgery & radiation oncology.',
+                beds: '431 Beds (Cancer Care)',
                 placements: 'Elite brand equity. Students transition to high-end oncology care easily.',
                 verdict: 'The Niche Specialist Profile. Lowest cost, elite brand, but clinical exposure is strictly limited to oncology.',
-                color: 'indigo'
+                themeColor: 'indigo',
+                badgeText: 'Lowest Tuition / Elite Brand',
+                badgeColor: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+                headerGradient: 'from-indigo-500 to-blue-700',
+                topPick: true
             },
             {
                 id: 'snu',
                 name: 'Sister Nivedita University',
+                shortName: 'Sister Nivedita',
                 type: 'Interdisciplinary University',
+                category: 'university',
                 address: 'DG 1/2, Action Area 1, Newtown, Kolkata',
                 fees: '₹2,24,000',
+                feeNumeric: 224000,
                 hostel: '₹1,44,000 - ₹1,80,000 / year',
                 seatsMedSurg: '2 All India | 3 Home State',
+                seatsAI: 2,
+                seatsHS: 3,
+                totalSeats: 5,
                 infrastructure: 'Large university campus. Uses external hospitals (Pavlov, Calcutta Heart) for clinicals.',
+                beds: 'External Tie-ups',
                 placements: 'Good, but reviews cite logistical friction traveling to external clinical sites.',
                 verdict: 'The Academic Profile. Great campus life, but high total cost and logistical challenges for daily clinical rotations.',
-                color: 'purple'
+                themeColor: 'purple',
+                badgeText: 'Campus & Academic Life',
+                badgeColor: 'bg-purple-100 text-purple-800 border-purple-200',
+                headerGradient: 'from-purple-500 to-violet-600',
+                topPick: false
             },
             {
                 id: 'neotia',
                 name: 'Neotia Academy',
+                shortName: 'Neotia Academy',
                 type: 'Boutique Corporate',
+                category: 'corporate',
                 address: '2052, Chakgaria, Pancha Sayar, Kolkata 700094',
                 fees: '₹2,00,000',
+                feeNumeric: 200000,
                 hostel: '₹60,000 - ₹90,000 / year (Includes Mess!)',
                 seatsMedSurg: '1 All India | 0 Home State',
+                seatsAI: 1,
+                seatsHS: 0,
+                totalSeats: 1,
                 infrastructure: 'Small, intimate classrooms. Clinicals at Neotia Network (Women/Child/Gen Med focus).',
+                beds: 'Neotia Network',
                 placements: '~90% placement. Avg package ₹4.0 - ₹4.5 LPA.',
                 verdict: 'The Value Optimizer Profile. Best financial ROI regarding total cost (tuition+hostel), but extremely rare seats.',
-                color: 'emerald'
+                themeColor: 'emerald',
+                badgeText: 'Best Total ROI (Mess Inc.)',
+                badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                headerGradient: 'from-emerald-500 to-teal-700',
+                topPick: false
             },
             {
                 id: 'snu_mh',
                 name: 'Sister Nivedita (Mental Health)',
+                shortName: 'SNU Mental Health',
                 type: 'University - Mental Health',
+                category: 'university',
                 address: 'DG 1/2, Action Area 1, Newtown, Kolkata',
                 fees: '₹2,24,000',
+                feeNumeric: 224000,
                 hostel: '₹1,44,000 - ₹1,80,000 / year',
                 seatsMedSurg: '2 All India | 10 Home State (Mental Health)',
+                seatsAI: 2,
+                seatsHS: 10,
+                totalSeats: 12,
                 infrastructure: 'University campus. Uses external mental health institutes (like Pavlov) for clinicals.',
+                beds: 'Pavlov & External',
                 placements: 'Growing demand in psychiatric nursing. Good university placement cell.',
                 verdict: 'Good for those specifically targeting the Mental Health specialization with university campus life.',
-                color: 'fuchsia'
+                themeColor: 'fuchsia',
+                badgeText: 'Mental Health Focus',
+                badgeColor: 'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-200',
+                headerGradient: 'from-fuchsia-500 to-pink-600',
+                topPick: false
             },
             {
                 id: 'bmbirla',
                 name: 'B.M. Birla College of Nursing',
+                shortName: 'B.M. Birla',
                 type: 'Premium Corporate',
+                category: 'corporate',
                 address: '1/1, National Library Avenue, Kolkata - 700027',
                 fees: '₹2,50,000+',
+                feeNumeric: 250000,
                 hostel: 'Available (Subject to availability)',
                 seatsMedSurg: '5 All India | 10 Home State (Med-Surg)',
+                seatsAI: 5,
+                seatsHS: 10,
+                totalSeats: 15,
                 infrastructure: 'CK Birla Group. State-of-the-art labs and a highly reputed cardiac-focused parent hospital.',
+                beds: 'CK Birla Cardiac Hub',
                 placements: 'Excellent. High brand value across India.',
                 verdict: 'Top-tier reputation and brand value. An excellent choice if budget permits.',
-                color: 'rose'
+                themeColor: 'rose',
+                badgeText: 'Cardiac Reputed / High Seats',
+                badgeColor: 'bg-rose-100 text-rose-800 border-rose-200',
+                headerGradient: 'from-rose-500 to-red-600',
+                topPick: false
             },
             {
                 id: 'narayana',
                 name: 'Narayana Hospital (R.N. Tagore)',
+                shortName: 'Narayana (RTIICS)',
                 type: 'Corporate Multispecialty',
+                category: 'corporate',
                 address: '124, Mukundapur, E.M. Bypass, Kolkata',
                 fees: '₹2,40,000+',
+                feeNumeric: 240000,
                 hostel: 'Available',
                 seatsMedSurg: '5 All India | 10 Home State (Med-Surg)',
+                seatsAI: 5,
+                seatsHS: 10,
+                totalSeats: 15,
                 infrastructure: 'Asia Heart Foundation. Massive footfall and intense clinical exposure.',
+                beds: '650+ Beds Multi-Cardiac',
                 placements: 'Near 100% absorption in the Narayana Health network across India.',
                 verdict: 'Intense, high-volume clinical learning. Highly recommended for Medical Surgical.',
-                color: 'orange'
+                themeColor: 'orange',
+                badgeText: 'High Volume Clinicals',
+                badgeColor: 'bg-orange-100 text-orange-800 border-orange-200',
+                headerGradient: 'from-orange-500 to-amber-600',
+                topPick: false
             },
             {
                 id: 'kpc',
                 name: 'Sova Rani Nursing College (KPC)',
+                shortName: 'KPC Medical',
                 type: 'Medical College Attached',
+                category: 'medical_college',
                 address: '1F, Raja S.C. Mullick Road, Jadavpur, Kolkata',
                 fees: '₹2,30,000+',
+                feeNumeric: 230000,
                 hostel: 'Available on campus',
                 seatsMedSurg: '0 All India | 7 Home State (Med-Surg)',
+                seatsAI: 0,
+                seatsHS: 7,
+                totalSeats: 7,
                 infrastructure: 'Attached to KPC Medical College (750+ beds). Massive campus in South Kolkata.',
+                beds: '750+ Medical College Beds',
                 placements: 'Very high. Students get immediate placements in KPC or other large corporate hospitals.',
                 verdict: 'The Medical College Experience. Best for raw, high-volume general ward clinical exposure.',
-                color: 'amber'
+                themeColor: 'amber',
+                badgeText: 'Full Medical College Attached',
+                badgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
+                headerGradient: 'from-amber-500 to-yellow-600',
+                topPick: false
             }
         ];
 
-        // State: Initially select top 3 for best mobile view, but users can change
+        // State variables
         let selectedIds = ['apollo', 'charnock', 'tmc'];
+        let searchQuery = '';
+        let currentView = 'cards'; // 'cards' | 'duel' | 'table'
+        let duelCollege1 = 'apollo';
+        let duelCollege2 = 'tmc';
 
-        function renderSelectors() {
-            const container = document.getElementById('college-selectors');
-            container.innerHTML = collegeData.map(college => `
-                <div>
-                    <input type="checkbox" id="chk-${college.id}" class="college-checkbox hidden" 
-                           value="${college.id}" ${selectedIds.includes(college.id) ? 'checked' : ''} 
-                           onchange="handleToggle('${college.id}')">
-                    <label for="chk-${college.id}" 
-                           class="inline-block px-4 py-2 border border-slate-300 rounded-full text-sm font-medium text-slate-700 cursor-pointer transition-colors hover:bg-slate-50">
-                        ${college.name}
-                    </label>
-                </div>
-            `).join('');
+        // Helper to prevent XSS
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag])
+            );
         }
 
+        // Initialize from URL Params if available
+        function loadStateFromURL() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const sel = params.get('selected');
+                if (sel) {
+                    const ids = sel.split(',').filter(id => collegeData.some(c => c.id === id));
+                    if (ids.length > 0) {
+                        selectedIds = ids;
+                    }
+                }
+                const view = params.get('view');
+                if (['cards', 'duel', 'table'].includes(view)) {
+                    currentView = view;
+                }
+            } catch (e) {
+                console.error("Error loading state from URL", e);
+            }
+        }
+
+        function updateURLState() {
+            try {
+                const params = new URLSearchParams();
+                params.set('selected', selectedIds.join(','));
+                params.set('view', currentView);
+                const newURL = window.location.pathname + '?' + params.toString();
+                window.history.replaceState({}, '', newURL);
+            } catch (e) {}
+        }
+
+        // Render Selector Checkbox Pills
+        function renderSelectors() {
+            const container = document.getElementById('college-selectors');
+            const countEl = document.getElementById('selected-count');
+            const mobileCountEl = document.getElementById('mobile-bottom-count');
+            
+            countEl.innerText = selectedIds.length;
+            if (mobileCountEl) mobileCountEl.innerText = `${selectedIds.length} Selected`;
+
+            container.innerHTML = collegeData.map(college => {
+                const isChecked = selectedIds.includes(college.id);
+                return `
+                    <div>
+                        <input type="checkbox" id="chk-${college.id}" class="hidden" 
+                               value="${college.id}" ${isChecked ? 'checked' : ''} 
+                               onchange="handleToggle('${college.id}')">
+                        <label for="chk-${college.id}" 
+                               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all select-none border ${
+                                   isChecked 
+                                   ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
+                                   : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+                               }">
+                            <span class="w-1.5 h-1.5 rounded-full ${isChecked ? 'bg-brand-400' : 'bg-slate-300'}"></span>
+                            ${college.shortName || college.name}
+                        </label>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Handle Checkbox Selection
         function handleToggle(id) {
             if (selectedIds.includes(id)) {
-                // Prevent unselecting if only one is left
-                if(selectedIds.length > 1) {
+                if (selectedIds.length > 1) {
                     selectedIds = selectedIds.filter(val => val !== id);
                 } else {
-                    // Recheck the box visually since we aborted state change
-                    document.getElementById(`chk-${id}`).checked = true;
-                    return; // exit early
+                    showToast('At least 1 college must remain selected.');
+                    const chk = document.getElementById(`chk-${id}`);
+                    if (chk) chk.checked = true;
+                    return;
                 }
             } else {
                 selectedIds.push(id);
             }
-            renderTable();
+            updateURLState();
+            renderAllViews();
         }
 
-        function renderTable() {
-            const container = document.getElementById('table-container');
-            
-            // Get data for selected colleges only, maintaining original order
-            const activeColleges = collegeData.filter(c => selectedIds.includes(c.id));
-            
-            if (activeColleges.length === 0) return;
+        function selectAllColleges() {
+            selectedIds = collegeData.map(c => c.id);
+            updateURLState();
+            renderAllViews();
+            showToast('All 9 colleges selected');
+        }
 
-            // Generate Columns
+        function clearAllColleges() {
+            selectedIds = ['apollo', 'charnock', 'tmc'];
+            updateURLState();
+            renderAllViews();
+            showToast('Reset to Top 3 recommended');
+        }
+
+        // Preset Filters
+        function applyPreset(type) {
+            // Update active styling
+            document.querySelectorAll('#preset-filters button').forEach(btn => {
+                btn.className = 'px-2.5 py-1 rounded-lg font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 border border-transparent transition-colors';
+            });
+            const activeBtn = document.getElementById(`preset-${type}`);
+            if (activeBtn) {
+                activeBtn.className = 'px-2.5 py-1 rounded-lg font-semibold bg-brand-50 text-brand-700 border border-brand-200 transition-colors';
+            }
+
+            if (type === 'all') {
+                selectedIds = collegeData.map(c => c.id);
+            } else if (type === 'top3') {
+                selectedIds = ['apollo', 'charnock', 'tmc'];
+            } else if (type === 'budget') {
+                selectedIds = collegeData.filter(c => c.feeNumeric <= 224000).map(c => c.id);
+            } else if (type === 'highseats') {
+                selectedIds = collegeData.filter(c => c.totalSeats >= 10).map(c => c.id);
+            } else if (type === 'corporate') {
+                selectedIds = collegeData.filter(c => c.category === 'corporate').map(c => c.id);
+            }
+
+            updateURLState();
+            renderAllViews();
+        }
+
+        // Search Handling
+        function handleSearch(val) {
+            searchQuery = (val || '').trim().toLowerCase();
+            const clearBtn = document.getElementById('search-clear-btn');
+            if (searchQuery.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+            renderAllViews();
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('search-input');
+            input.value = '';
+            handleSearch('');
+        }
+
+        function resetFiltersAndSelection() {
+            clearSearch();
+            selectAllColleges();
+        }
+
+        // Filter colleges according to search and selection
+        function getFilteredColleges() {
+            return collegeData.filter(c => {
+                const matchesSelection = selectedIds.includes(c.id);
+                if (!matchesSelection) return false;
+                
+                if (!searchQuery) return true;
+                const haystack = `${c.name} ${c.type} ${c.address} ${c.infrastructure} ${c.verdict} ${c.placements} ${c.seatsMedSurg}`.toLowerCase();
+                return haystack.includes(searchQuery);
+            });
+        }
+
+        // View Mode Switcher
+        function setViewMode(mode) {
+            currentView = mode;
+            
+            // Containers
+            const cardsContainer = document.getElementById('view-cards-container');
+            const duelContainer = document.getElementById('view-duel-container');
+            const tableContainer = document.getElementById('view-table-container');
+
+            cardsContainer.classList.toggle('hidden', mode !== 'cards');
+            duelContainer.classList.toggle('hidden', mode !== 'duel');
+            tableContainer.classList.toggle('hidden', mode !== 'table');
+
+            // Header button styles
+            const btnCards = document.getElementById('view-cards-btn');
+            const btnDuel = document.getElementById('view-duel-btn');
+            const btnTable = document.getElementById('view-table-btn');
+
+            const activeClass = 'flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all bg-white text-brand-700 shadow-sm';
+            const inactiveClass = 'flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition-all text-slate-600 hover:text-slate-900';
+
+            btnCards.className = mode === 'cards' ? activeClass : inactiveClass;
+            btnDuel.className = mode === 'duel' ? activeClass : inactiveClass;
+            btnTable.className = mode === 'table' ? activeClass : inactiveClass;
+
+            // Mobile bottom nav button styles
+            const mBtnCards = document.getElementById('mobile-btn-cards');
+            const mBtnDuel = document.getElementById('mobile-btn-duel');
+            const mBtnTable = document.getElementById('mobile-btn-table');
+
+            const mActive = 'px-3 py-1 text-xs font-bold rounded-lg bg-white text-brand-700 shadow-xs flex items-center gap-1';
+            const mInactive = 'px-3 py-1 text-xs font-semibold rounded-lg text-slate-600 flex items-center gap-1';
+
+            if (mBtnCards) mBtnCards.className = mode === 'cards' ? mActive : mInactive;
+            if (mBtnDuel) mBtnDuel.className = mode === 'duel' ? mActive : mInactive;
+            if (mBtnTable) mBtnTable.className = mode === 'table' ? mActive : mInactive;
+
+            updateURLState();
+        }
+
+        // Render Cards View
+        function renderCardsView(colleges) {
+            const grid = document.getElementById('cards-grid');
+            const countLabel = document.getElementById('cards-showing-count');
+            countLabel.innerText = `(${colleges.length} displayed)`;
+
+            grid.innerHTML = colleges.map(c => `
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-subtle hover:shadow-card-hover transition-all duration-200 flex flex-col justify-between overflow-hidden group">
+                    <div>
+                        <!-- Header Banner -->
+                        <div class="bg-gradient-to-r ${c.headerGradient} p-4 text-white relative">
+                            <div class="flex items-start justify-between gap-2">
+                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white/20 backdrop-blur-sm border border-white/20 text-white inline-block">
+                                    ${escapeHTML(c.type)}
+                                </span>
+                                <button onclick="quickDuelWith('${c.id}')" title="Compare 1-on-1 in Duel" class="text-white/80 hover:text-white bg-black/10 hover:bg-black/20 p-1.5 rounded-lg text-xs transition-colors">
+                                    <i class="fa-solid fa-code-compare"></i> Duel
+                                </button>
+                            </div>
+                            <h3 class="text-lg font-bold mt-2 leading-snug tracking-tight text-white">${escapeHTML(c.name)}</h3>
+                            <div class="flex items-center gap-1.5 text-xs text-white/90 mt-1">
+                                <i class="fa-solid fa-location-dot text-white/70"></i>
+                                <span class="truncate">${escapeHTML(c.address.split(',').slice(-2).join(','))}</span>
+                            </div>
+                        </div>
+
+                        <!-- Badge Strip -->
+                        <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                            <span class="text-xs font-semibold px-2 py-0.5 rounded-md border ${c.badgeColor}">
+                                <i class="fa-solid fa-award mr-1"></i> ${escapeHTML(c.badgeText)}
+                            </span>
+                            <span class="text-xs font-bold text-slate-700">
+                                <i class="fa-solid fa-hospital text-brand-500 mr-1"></i> ${escapeHTML(c.beds)}
+                            </span>
+                        </div>
+
+                        <!-- Core Metrics Grid -->
+                        <div class="p-4 space-y-3.5 text-sm">
+                            
+                            <!-- Fees & Hostel -->
+                            <div class="grid grid-cols-2 gap-2 bg-slate-50/80 p-2.5 rounded-xl border border-slate-100">
+                                <div>
+                                    <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Tuition (2 Yrs)</div>
+                                    <div class="font-extrabold text-slate-900 text-sm sm:text-base text-brand-700">${escapeHTML(c.fees)}</div>
+                                </div>
+                                <div>
+                                    <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Hostel & Mess</div>
+                                    <div class="font-medium text-slate-800 text-xs truncate" title="${escapeHTML(c.hostel)}">${escapeHTML(c.hostel)}</div>
+                                </div>
+                            </div>
+
+                            <!-- Seats Breakdown -->
+                            <div>
+                                <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1 flex items-center justify-between">
+                                    <span>MSc Seat Matrix</span>
+                                    <span class="font-bold text-slate-700">${escapeHTML(c.seatsMedSurg)}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="flex-1 bg-brand-50 text-brand-800 text-xs font-bold py-1 px-2 rounded-lg border border-brand-100 text-center">
+                                        All India: ${c.seatsAI}
+                                    </span>
+                                    <span class="flex-1 bg-emerald-50 text-emerald-800 text-xs font-bold py-1 px-2 rounded-lg border border-emerald-100 text-center">
+                                        Home State: ${c.seatsHS}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Clinical Exposure Details -->
+                            <div>
+                                <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Clinical Infrastructure</div>
+                                <p class="text-xs text-slate-700 leading-relaxed font-normal">${escapeHTML(c.infrastructure)}</p>
+                            </div>
+
+                            <!-- Placements -->
+                            <div>
+                                <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Placements & Outcomes</div>
+                                <p class="text-xs text-slate-700 leading-relaxed font-normal">${escapeHTML(c.placements)}</p>
+                            </div>
+
+                            <!-- Full Address -->
+                            <details class="text-xs text-slate-500 cursor-pointer pt-1 border-t border-slate-100">
+                                <summary class="font-semibold text-brand-600 hover:underline">View Full Address & Details</summary>
+                                <p class="mt-1.5 text-slate-600 leading-relaxed">${escapeHTML(c.address)}</p>
+                            </details>
+
+                        </div>
+                    </div>
+
+                    <!-- Final Verdict Box -->
+                    <div class="p-4 bg-slate-50/90 border-t border-slate-200">
+                        <div class="text-[11px] font-bold uppercase tracking-wider text-brand-700 flex items-center gap-1.5 mb-1">
+                            <i class="fa-solid fa-scale-balanced"></i> Strategic Verdict
+                        </div>
+                        <p class="text-xs font-semibold text-slate-800 leading-relaxed">${escapeHTML(c.verdict)}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Duel (Head-to-Head) View
+        function renderDuelView() {
+            const select1 = document.getElementById('duel-select-1');
+            const select2 = document.getElementById('duel-select-2');
+            const container = document.getElementById('duel-result-container');
+
+            // Populate options if not already done
+            if (select1.options.length === 0) {
+                collegeData.forEach(c => {
+                    select1.add(new Option(c.name, c.id, false, c.id === duelCollege1));
+                    select2.add(new Option(c.name, c.id, false, c.id === duelCollege2));
+                });
+            }
+
+            duelCollege1 = select1.value || 'apollo';
+            duelCollege2 = select2.value || 'tmc';
+
+            const c1 = collegeData.find(c => c.id === duelCollege1) || collegeData[0];
+            const c2 = collegeData.find(c => c.id === duelCollege2) || collegeData[1];
+
+            const duelRow = (title, icon, val1, val2, highlight = false) => `
+                <div class="border-b border-slate-100 py-3">
+                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center justify-center gap-1.5 mb-2">
+                        <i class="${icon} text-brand-500"></i> ${title}
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs sm:text-sm">
+                        <div class="p-2.5 rounded-xl ${highlight ? 'bg-brand-50/70 font-bold text-brand-900 border border-brand-100' : 'bg-slate-50 text-slate-800'} text-center">
+                            ${escapeHTML(val1)}
+                        </div>
+                        <div class="p-2.5 rounded-xl ${highlight ? 'bg-purple-50/70 font-bold text-purple-900 border border-purple-100' : 'bg-slate-50 text-slate-800'} text-center">
+                            ${escapeHTML(val2)}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = `
+                <!-- Sticky Header of Duel Colleges -->
+                <div class="grid grid-cols-2 gap-2 mb-4">
+                    <div class="bg-gradient-to-r ${c1.headerGradient} text-white p-3.5 rounded-xl text-center shadow-sm">
+                        <span class="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-full inline-block mb-1">${escapeHTML(c1.type)}</span>
+                        <h4 class="text-sm sm:text-base font-extrabold leading-tight">${escapeHTML(c1.name)}</h4>
+                    </div>
+                    <div class="bg-gradient-to-r ${c2.headerGradient} text-white p-3.5 rounded-xl text-center shadow-sm">
+                        <span class="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-full inline-block mb-1">${escapeHTML(c2.type)}</span>
+                        <h4 class="text-sm sm:text-base font-extrabold leading-tight">${escapeHTML(c2.name)}</h4>
+                    </div>
+                </div>
+
+                <!-- Attributes Comparison -->
+                <div class="space-y-1">
+                    ${duelRow('2-Year MSc Tuition', 'fa-solid fa-indian-rupee-sign', c1.fees, c2.fees, true)}
+                    ${duelRow('Hostel & Mess Charges', 'fa-solid fa-bed', c1.hostel, c2.hostel)}
+                    ${duelRow('Hospital Beds / Exposure', 'fa-solid fa-hospital', c1.infrastructure, c2.infrastructure)}
+                    ${duelRow('MSc Seat Matrix', 'fa-solid fa-chair', c1.seatsMedSurg, c2.seatsMedSurg, true)}
+                    ${duelRow('Placements & Reputation', 'fa-solid fa-star', c1.placements, c2.placements)}
+                    ${duelRow('Address & Area', 'fa-solid fa-location-dot', c1.address, c2.address)}
+                    
+                    <!-- Verdict Comparison -->
+                    <div class="pt-3">
+                        <div class="text-[11px] font-bold text-brand-700 uppercase tracking-wider flex items-center justify-center gap-1.5 mb-2">
+                            <i class="fa-solid fa-scale-balanced"></i> Final Comparative Verdict
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div class="p-3 bg-brand-50 rounded-xl border border-brand-200 text-slate-800 font-medium leading-relaxed">
+                                ${escapeHTML(c1.verdict)}
+                            </div>
+                            <div class="p-3 bg-purple-50 rounded-xl border border-purple-200 text-slate-800 font-medium leading-relaxed">
+                                ${escapeHTML(c2.verdict)}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function quickDuelWith(id) {
+            duelCollege1 = id;
+            duelCollege2 = id === 'apollo' ? 'tmc' : 'apollo';
+            const s1 = document.getElementById('duel-select-1');
+            const s2 = document.getElementById('duel-select-2');
+            if (s1 && s2) {
+                s1.value = duelCollege1;
+                s2.value = duelCollege2;
+            }
+            setViewMode('duel');
+            renderDuelView();
+            window.scrollTo({ top: 250, behavior: 'smooth' });
+        }
+
+        // Render Table View (Responsive with sticky column & touch-scroll)
+        function renderTableView(colleges) {
+            const container = document.getElementById('table-scroll-container');
+            if (colleges.length === 0) return;
+
             let html = `
                 <table class="w-full text-left border-collapse min-w-max">
                     <thead>
                         <tr>
-                            <th class="sticky-col p-4 w-48 border-b border-r border-slate-200 bg-slate-100 text-slate-500 font-semibold uppercase text-xs tracking-wider">
-                                Features
+                            <th class="sticky-col p-4 w-44 sm:w-52 border-b border-r border-slate-200 bg-slate-100 text-slate-600 font-bold uppercase text-xs tracking-wider">
+                                Metric / Feature
                             </th>
-                            ${activeColleges.map(c => `
-                                <th class="p-6 border-b border-slate-200 bg-white min-w-[280px] max-w-[320px] align-top">
-                                    <div class="text-sm font-bold text-${c.color}-600 bg-${c.color}-50 inline-block px-2 py-1 rounded mb-2">
-                                        ${c.type}
-                                    </div>
-                                    <h3 class="text-xl font-bold text-slate-900 leading-tight">${c.name}</h3>
+                            ${colleges.map(c => `
+                                <th class="p-4 sm:p-5 border-b border-slate-200 bg-white min-w-[260px] max-w-[300px] align-top">
+                                    <span class="text-xs font-bold text-${c.themeColor}-700 bg-${c.themeColor}-50 border border-${c.themeColor}-200 px-2 py-0.5 rounded inline-block mb-1.5">
+                                        ${escapeHTML(c.type)}
+                                    </span>
+                                    <h3 class="text-base font-bold text-slate-900 leading-snug">${escapeHTML(c.name)}</h3>
+                                    <span class="text-xs font-semibold text-slate-500 block mt-1"><i class="fa-solid fa-hospital text-brand-500 mr-1"></i>${escapeHTML(c.beds)}</span>
                                 </th>
                             `).join('')}
                         </tr>
                     </thead>
-                    <tbody class="text-sm text-slate-700 divide-y divide-slate-200">
+                    <tbody class="text-xs sm:text-sm text-slate-700 divide-y divide-slate-200">
             `;
 
-            // Helper function for rows
-            const makeRow = (icon, title, key, isHtml = false, highlight = false) => {
+            const makeTableRow = (icon, title, key, highlight = false) => {
                 let rowHtml = `
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="sticky-col p-4 border-r border-slate-200 font-medium text-slate-900 align-top">
+                    <tr class="hover:bg-slate-50/80 transition-colors">
+                        <td class="sticky-col p-3.5 sm:p-4 border-r border-slate-200 font-bold text-slate-900 align-top">
                             <div class="flex items-center gap-2">
-                                <i class="${icon} text-slate-400 w-5 text-center"></i>
-                                ${title}
+                                <i class="${icon} text-brand-500 w-4 text-center"></i>
+                                <span>${title}</span>
                             </div>
                         </td>
                 `;
-                activeColleges.forEach(c => {
-                    const cellClass = highlight ? `p-4 align-top font-semibold text-slate-900 bg-slate-50/50` : `p-4 align-top leading-relaxed`;
-                    rowHtml += `<td class="${cellClass}">${isHtml ? c[key] : escapeHTML(c[key])}</td>`;
+                colleges.forEach(c => {
+                    const cellClass = highlight 
+                        ? `p-3.5 sm:p-4 align-top font-bold text-slate-900 bg-brand-50/30` 
+                        : `p-3.5 sm:p-4 align-top leading-relaxed`;
+                    rowHtml += `<td class="${cellClass}">${escapeHTML(c[key])}</td>`;
                 });
                 rowHtml += `</tr>`;
                 return rowHtml;
             };
 
-            html += makeRow('fa-solid fa-location-dot', 'Address', 'address');
-            html += makeRow('fa-solid fa-indian-rupee-sign', 'MSc Tuition (2 Yrs)', 'fees', false, true);
-            html += makeRow('fa-solid fa-bed', 'Hostel & Mess', 'hostel');
-            html += makeRow('fa-solid fa-hospital', 'Clinical Exposure', 'infrastructure');
-            html += makeRow('fa-solid fa-chair', 'MSc Seats (per PDF)', 'seatsMedSurg', false, true);
-            html += makeRow('fa-solid fa-star', 'Student Outcomes', 'placements');
-            
+            html += makeTableRow('fa-solid fa-indian-rupee-sign', 'MSc Tuition (2 Yrs)', 'fees', true);
+            html += makeTableRow('fa-solid fa-chair', 'Seat Matrix (AI | HS)', 'seatsMedSurg', true);
+            html += makeTableRow('fa-solid fa-bed', 'Hostel & Mess', 'hostel');
+            html += makeTableRow('fa-solid fa-hospital', 'Clinical Exposure', 'infrastructure');
+            html += makeTableRow('fa-solid fa-star', 'Placements & Reviews', 'placements');
+            html += makeTableRow('fa-solid fa-location-dot', 'Address & Area', 'address');
+
             // Verdict Row
             html += `
-                <tr>
-                    <td class="sticky-col p-4 border-r border-slate-200 font-bold text-primary align-top bg-primary/5">
+                <tr class="bg-slate-50/90 font-medium">
+                    <td class="sticky-col p-3.5 sm:p-4 border-r border-slate-200 font-extrabold text-brand-800 align-top bg-brand-50/50">
                         <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-scale-balanced w-5 text-center"></i>
-                            Final Verdict
+                            <i class="fa-solid fa-scale-balanced text-brand-600 w-4 text-center"></i>
+                            <span>Final Verdict</span>
                         </div>
                     </td>
-                    ${activeColleges.map(c => `
-                        <td class="p-4 align-top bg-slate-50 border-t-2 border-${c.color}-400">
-                            <p class="font-medium text-slate-800 leading-relaxed">${c.verdict}</p>
+                    ${colleges.map(c => `
+                        <td class="p-3.5 sm:p-4 align-top border-t-2 border-brand-500">
+                            <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-relaxed">${escapeHTML(c.verdict)}</p>
                         </td>
                     `).join('')}
                 </tr>
@@ -350,22 +1102,87 @@
             container.innerHTML = html;
         }
 
-        // Helper to prevent XSS (even though data is hardcoded, it's good practice)
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    "'": '&#39;',
-                    '"': '&quot;'
-                }[tag])
-            );
+        // Render all active views
+        function renderAllViews() {
+            renderSelectors();
+            const colleges = getFilteredColleges();
+
+            const noResults = document.getElementById('no-results-state');
+            const cardsContainer = document.getElementById('view-cards-container');
+            const tableContainer = document.getElementById('view-table-container');
+
+            if (colleges.length === 0) {
+                noResults.classList.remove('hidden');
+                cardsContainer.classList.add('hidden');
+                tableContainer.classList.add('hidden');
+            } else {
+                noResults.classList.add('hidden');
+                if (currentView === 'cards') cardsContainer.classList.remove('hidden');
+                if (currentView === 'table') tableContainer.classList.remove('hidden');
+                
+                renderCardsView(colleges);
+                renderTableView(colleges);
+                renderDuelView();
+            }
+        }
+
+        // Toast Message Helper
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.innerText = msg;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 2500);
+        }
+
+        // Share / Copy Link Helper
+        function shareOrCopyLink() {
+            const url = window.location.href;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'JEMScN 2026 College Comparator',
+                    text: 'Compare top private nursing colleges for WBJEEB JEMScN MSc Nursing admissions.',
+                    url: url
+                }).catch(() => {
+                    copyToClipboard(url);
+                });
+            } else {
+                copyToClipboard(url);
+            }
+        }
+
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('Link copied to clipboard!');
+                }).catch(() => {
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const input = document.createElement('textarea');
+            input.value = text;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            showToast('Link copied to clipboard!');
         }
 
         // Initialize App
-        renderSelectors();
-        renderTable();
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStateFromURL();
+            setViewMode(currentView);
+            renderAllViews();
+        });
     </script>
 </body>
 </html>
